@@ -140,7 +140,8 @@ y luego, agregamos los paths en nuestro `tsconfig.ts`
 
 
 # Husky
-Husky es una herramienta para gestionar git hooks de manera sencilla en proyectos JavaScript/TypeScript, permitiendo ejecutar scripts antes de commits o pushes para mejorar la calidad del código.
+[Husky](https://github.com/typicode/husky#readme)
+es una herramienta para gestionar git hooks de manera sencilla en proyectos JavaScript/TypeScript, permitiendo ejecutar scripts antes de commits o pushes para mejorar la calidad del código.
 
 ### Version simple:
  - implementamos una feature
@@ -165,3 +166,37 @@ Husky es una herramienta para gestionar git hooks de manera sencilla en proyecto
  ```
 
  Esto nos va a crear una carpeta oculta `.husky` con un archivo dentro de ese directorio, llamado pre-commit .(sin extension, porq por defecto es un archivo bash, que ejecuta un script.). Dentro de ese archivo pre-commit veremos el script `npm test`. si no tenes un script de test en el package.json, esto te dara error. por lo tanto se debe modificar. Para una simple prueba, puedes modificar el script npm test por `npm run lint`
+
+ ### para crear distintos tipos de scripts en husky:
+ - npx husky add .husky/file-name "script"
+
+ ```bash
+    npx husky add .husky/pre-push "npm run build"
+ ```
+
+ - script para agregar el commit lint con husky
+
+ ```bash
+    npx husky add .husky/commit-msg 'npx --no -- commitlint -- edit ${1}'
+ ```
+
+# Conventional Commits
+[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+esta herramienta nos permite redactar commits con ciertas reglas semanticas. (esto se ejecuta en el pre-commit de husky). Esta libreria nos pide que: los commits sean en minuscula, que sean concisos los mensajes (mensajes cortos).
+
+[commit lint](https://commitlint.js.org/guides/getting-started.html)
+
+```bash
+    npm install --save-dev @commitlint/config-conventional @commitlint/cli
+```
+
+ejecutamos este otro script para crear el archivo de configuracion de commit lint
+
+```bash
+    echo "export default { extends: ['@commitlint/config-conventional'] };" > commitlint.config.js
+```
+
+- formato de commit: 
+ `<type>[optional scope]: <description>`
+
+`git commit -m "chore: add commitlint"` 
