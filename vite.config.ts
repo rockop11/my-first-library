@@ -1,6 +1,7 @@
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
+import viteConfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
     build: {
@@ -9,5 +10,15 @@ export default defineConfig({
             name: 'my-first-library'
         }
     },
-    plugins: [dts({ outDir: 'dist' })]
+    resolve: {
+        alias: {
+            '@src': resolve(__dirname, '/src')
+        }
+    },
+    plugins: [
+        dts({ outDir: 'dist' }),
+        viteConfigPaths({
+
+        })
+    ]
 })
