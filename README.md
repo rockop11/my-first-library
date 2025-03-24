@@ -177,7 +177,7 @@ es una herramienta para gestionar git hooks de manera sencilla en proyectos Java
  - script para agregar el commit lint con husky
 
  ```bash
-    npx husky add .husky/commit-msg 'npx --no -- commitlint -- edit ${1}'
+    npx husky add .husky/commit-msg 'npx --no -- commitlint --edit ${1}'
  ```
 
 # Conventional Commits
