@@ -73,7 +73,7 @@ xEj: index.html | /public | styles.css | counter.ts | typescript.svg | etc.
  - agregamos el publishConfig para declarar donde se va a publicar nuestra libreria
  ```json
  "publishConfig": {
-    "registry": "htts://registry.npmjs.org" //preguntar si aca va a el link de nuestra lib ya desplegado. o solamente el link de npm
+    "registry": "htts://registry.npmjs.org"
   },
  ```
 
