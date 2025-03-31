@@ -245,3 +245,25 @@ Las pruebas unitarias son tests automatizados que verifican el funcionamiento de
 ```
 
 
+# Github Actions
+ - es un sistema de automatizaciones que permite ejecutar flujos de trabajos (pipelines), en respeusta a eventos, dentro de un repositorio, a traves de archivos de configuracion.
+
+ - en este caso vamos a usar dependabot (bot de dependencias).
+
+ 1) creamos una carpeta oculta `.github`. (este nombre lo necesita github para chequear justamente los archivos dentro de esa carpeta.) 
+ 2) dentro de la carpeta .github, creamos un archivo llamado `dependabot.yml`
+ 3) agergamos esto dentro del archivo.
+ 
+ ```yaml
+# dependabot.yaml
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: /
+    schedule:
+      interval: "weekly"
+```
+
+4) entramos a github, y vamos al repo.
+ - vamos al apartado de *Security*
+ - habilitamos Dependabot alerts y Dependabot security updates.
