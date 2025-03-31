@@ -154,7 +154,7 @@ es una herramienta para gestionar git hooks de manera sencilla en proyectos Java
  - implementamos una feature
  - cambiamos la version del package.json
  - corremos test y eslint
- - pusheamos a una bracnh feature
+ - pusheamos a una branch feature
  - review del PR / MR
  - merge a rama estable
  - GITHUB Action para hacer test, build, y publish en npm.
@@ -200,3 +200,48 @@ ejecutamos este otro script para crear el archivo de configuracion de commit lin
  `<type>[optional scope]: <description>`
 
 `git commit -m "chore: add commitlint"` 
+
+
+# Unit Testing | Pruebas Unitarias
+Las pruebas unitarias son tests automatizados que verifican el funcionamiento de unidades individuales de código (como funciones o métodos) de manera aislada. Su objetivo es asegurar que cada componente funcione correctamente por sí solo.
+
+- en este caso vamos a usar [vitest](https://vitest.dev/).
+```bash
+    npm i -D vitest
+```
+
+- creamos los scripts en el package.json para poder ejecutar los tests:
+```json
+    "test": "vitest run --coverage",
+    "test:watch": "vitest --watch", 
+```
+
+- en el caso de no tener instalado `@vitest/coverage-v8`, la terminal va a solicitar instalarlo apretando "Y" en la terminal.
+- con respecto a la estructura de carpetas, en lo personal voy a usar una carpeta `/__test__` por modulos. ya que con esto tendriamos funcionalidad y tests en la misma jerarquia.
+- al ejecutar `npm run test`, este script nos va a generar un directorio llamado `coverage`, el que debemos agregar al `.gitignore`
+- dentro de esa carpeta coverage que se genera, hay un archivo `index.html` el cual contiene el "coverage de los test." se puede hacer doble click en el archivo y este va a abrir "una pagina con los test y su coverage"
+
+### config adicional para los test unitarios.
+- creamos un archivo `vitest.config.ts` en la raiz del proyecto.
+
+```javascript
+    import { defineConfig, mergeConfig } from 'vitest/config'
+
+    import viteConfig from './vite.config'
+
+    export default mergeConfig(
+        viteConfig, 
+        defineConfig({
+            test: {
+                globals: true
+            },
+        })
+    )
+```
+
+- para poder tener los global imports de la librearia de vitest, podemos agregar en el `tsconfig.ts` la siguiente linea:
+```json
+    "types": ["vitest/globals"]
+```
+
+
