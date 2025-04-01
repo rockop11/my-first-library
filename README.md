@@ -112,6 +112,35 @@ el versionado de nuestro package json va a informar las actualizaciones que tien
 
  //estas opciones son solamente para crear una librearia de terceros.
 
+- agregamos los scripts de ESLint al package.json
+ ```json
+    "lint": "eslint . --ext .ts --ignore-pattern dist/",
+    "lint:fix": "npm run lint --fix",
+ ```
+
+ - Desde la version 9.x.x se recomienda que el archivo de configuracion de eslint se llame `eslint.condig.ts`
+ 
+ ```javascript
+    import { defineConfig } from "eslint/config";
+
+    export default defineConfig([
+	    {
+		    languageOptions: {
+			    parserOptions: {
+				    ecmaVersion: "latest",
+				    sourceType: "module",
+			    },
+		    },
+		    files: ["**/*.ts"],
+		    rules: {
+			    semi: "error",
+			    "prefer-const": "error",
+			    "no-var": "error",
+		    },
+	    },
+    ]);
+ ```
+
 
  ### Import Aliases
   - Los import aliases nos van a permitir porder ingresar a diferentes directorios sin necesidad de agregar "../../../" para salir o entrar a diferentes carpetas. con esto, logramos entrar a los directorios directamente. xEj: (@src/file-name, @components/file-name, @services/file-name).
@@ -267,3 +296,4 @@ updates:
 4) entramos a github, y vamos al repo.
  - vamos al apartado de *Security*
  - habilitamos Dependabot alerts y Dependabot security updates.
+5) Dependabot nos va a generar un PR con las dependencias que deberiamos actualizar.
