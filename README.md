@@ -51,7 +51,10 @@ xEj: index.html | /public | styles.css | counter.ts | typescript.svg | etc.
 ## Modificamos el package.json
  - quitamos el `"private": true` ya que nuestra libreria se va a subir a npm. en el caso de que hagamos una libreria privada lo dejamos, pero hay que pagar...
 
- - agregamos los typings: `"typings": "./dist/index.d.ts"`. Rollup ira a buscar los archivos de definiciones a esa ruta.
+ - agregamos los typings. Rollup ira a buscar los archivos de definiciones a esa ruta.
+ ```json
+    "typings": "./dist/index.d.ts"
+ ```
 
  - declaramos la manera de como se va a importar nuestra librearia:
  ```json
@@ -101,7 +104,7 @@ el versionado de nuestro package json va a informar las actualizaciones que tien
  `ESLint` es una herramienta para analizar y corregir errores en código JavaScript y TypeScript. Ayuda a mantener buenas prácticas, asegurando un código limpio y consistente mediante reglas configurables.
 
 ```bash
-    npm init @eslint/config
+    npm init @eslint/config@latest
 ```
  - check sintaxys and find problems
  - JavaScript Modules
@@ -119,27 +122,29 @@ el versionado de nuestro package json va a informar las actualizaciones que tien
  ```
 
  - Desde la version 9.x.x se recomienda que el archivo de configuracion de eslint se llame `eslint.condig.ts`
+ - este archivo lo crea directamente el init script de eslint.
  
  ```javascript
-    import { defineConfig } from "eslint/config";
+import { defineConfig } from "eslint/config";
+import globals from "globals";
+import js from "@eslint/js";
+import tseslint from "typescript-eslint";
 
-    export default defineConfig([
-	    {
-		    languageOptions: {
-			    parserOptions: {
-				    ecmaVersion: "latest",
-				    sourceType: "module",
-			    },
-		    },
-		    files: ["**/*.ts"],
-		    rules: {
-			    semi: "error",
-			    "prefer-const": "error",
-			    "no-var": "error",
-		    },
-	    },
-    ]);
+
+export default defineConfig([
+  { files: ["**/*.{js,mjs,cjs,ts}"] },
+  { files: ["**/*.{js,mjs,cjs,ts}"], languageOptions: { globals: globals.browser } },
+  { files: ["**/*.{js,mjs,cjs,ts}"], plugins: { js }, extends: ["js/recommended"] },
+  tseslint.configs.recommended,
+  {
+    rules: {
+      'no-var': 'error',
+      'no-console': 'warn'
+    }
+  }
+]);
  ```
+ 
 
 
  ### Import Aliases
@@ -297,3 +302,55 @@ updates:
  - vamos al apartado de *Security*
  - habilitamos Dependabot alerts y Dependabot security updates.
 5) Dependabot nos va a generar un PR con las dependencias que deberiamos actualizar.
+
+# Subir a npm
+1) crear cuenta en [npmjs.com]('https://www.npmjs.com/')
+2) desde la terminal, ejecutamos
+```bash
+ npm login  
+```
+2.1) nos va a generar un link que nos redirige a npm que es donde va a estar subida nuestra libreria.  
+2.2) lo idea es tener un 2FA (autenticacion doble factor). Pero sino, nos llegaria un mail con un codigo provisiorio para iniciar sesion.   
+3) una vez inciada la sesion, ejecutamos:
+```bash
+    npm publish
+```
+----
+## El proceso ideal para ir versionando nuestra libreria es:
+
+1) Crear una rama nueva en la cual vamos a trabajar. (ya sea una feature o un fix, etc)
+```bash
+git checkout -b feature/nueva-funcionalidad
+```
+
+2) Commitear los cambios: 
+```bash
+git add .
+git commit -m "feat: agrego nueva funcionalidad"
+```
+
+3) Actualizar la version antes de pushear
+```bash
+npm version patch   # para cambios pequeños / fixes
+npm version minor   # para nuevas funcionalidades sin breaking changes
+npm version major   # para cambios incompatibles
+```
+- esto actualiaz el package.json, crea un commit con ese cambio, y crea un tag con la version. (X Ej: v1.2.3).
+
+4) Pusheamos la rama incluyendo los tags:
+```bash
+git push --follow-tags origin feature/nueva-funcionalidad
+```
+
+5) Creamos el MR en el versionador que uses.
+
+6) Volvemos a la rama main (o la ppal) y traemos los cambios mergeados.
+```bash
+git checkout main
+git pull origin main
+```
+
+7) publicar los cambios en npm:
+```bash
+npm publish
+```
